@@ -138,9 +138,9 @@ class ProductController extends Controller
                 $item += ['product_id' => $product->id];
                 ProductVariant::query()->updateOrCreate(
                     [
-                        'product_id' => $item['product_id'],
-                        'product_size_id' => $item['product_size_id'],
-                        'product_color_id' => $item['product_color_id'],
+                        'product_id'        => $item['product_id'],
+                        'product_size_id'   => $item['product_size_id'],
+                        'product_color_id'  => $item['product_color_id'],
                     ], // điều kiện check tồn tại để cập nhật và thêm mới
                     $item
                 );
@@ -160,6 +160,12 @@ class ProductController extends Controller
 
             DB::commit();
 
+            foreach ($request->product_variants as $item) {
+                if ((isset($item['image']) == true) && Storage::exists($item['current_image']) && !empty($item['current_image'])) {
+                    Storage::delete($item['current_image']);
+                }
+            }
+
             if (!empty($dataDeleteGalleries)) {
                 foreach ($dataDeleteGalleries as $id => $path) {
                     ProductGallery::query()->where('id', $id)->delete();
@@ -172,7 +178,7 @@ class ProductController extends Controller
 
             if (
                 !empty($productImgThumbnailCurrent) && Storage::exists($productImgThumbnailCurrent)
-                && !Storage::exists($product->img_thumbnail)
+                && (isset($request->img_thumbnail) == true)
             ) {
                 Storage::delete($productImgThumbnailCurrent);
             }

@@ -10,7 +10,7 @@ class CartController extends Controller
 {
     public function list()
     {
-        // dd(session('cart'));
+        dd(session('cart'));
         $cart = session('cart');
 
         $totalAmount = 0;
@@ -20,7 +20,7 @@ class CartController extends Controller
 
         return view('cart-list', compact('totalAmount'));
     }
-    public function add()
+    public function add(Request $request)
     {
         $product = Product::query()->findOrFail(\request('product_id'));
         $productVariant = ProductVariant::query()
@@ -33,28 +33,28 @@ class CartController extends Controller
             ->firstOrFail();
 
 
-// session()->forget('cart');
-// dd(session('cart'));
-// die;
+        // session()->forget('cart');
+        // dd(session('cart'));
+        // die;
 
         if (!isset(session('cart')[$productVariant->id])) {
             echo 2;
 
             $data = $product->toArray()
                 + $productVariant->toArray()
-                + ['quantity' => \request('quantity')];
+                + ['quantity' => $request->quantity];
 
             session()->put('cart.' . $productVariant->id,  $data);
+            dd($data);
             // dd(session('cart')[$productVariant->id]);
         } else {
             echo 1;
             $data = session('cart')[$productVariant->id];
             $data['quantity'] = \request('quantity');
-
+            dd($data);
             session()->put('cart.' . $productVariant->id,  $data);
-
         }
-// dd($data);
+
         return redirect()->route('cart.list');
     }
 }

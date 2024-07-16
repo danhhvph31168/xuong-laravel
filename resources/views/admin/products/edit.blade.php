@@ -215,6 +215,7 @@
                                                     <td>
                                                         <input type="file" class="form-control"
                                                             name="product_variants[{{ $key }}][image]">
+
                                                         <input type="hidden" class="form-control"
                                                             value="{{ $variants[$key]['image'] }}"
                                                             name="product_variants[{{ $key }}][current_image]">
@@ -362,7 +363,7 @@
             $('#gallery_list').append(html);
         }
 
-        function removeImageGallery(id) {
+        function removeImageGallery(id, galleryID, imagePath) {
             if (confirm('Chắc chắn xóa không?')) {
                 $('#' + id).remove();
 

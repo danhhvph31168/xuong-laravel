@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->type === self::TYPE_ADMIN;
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
