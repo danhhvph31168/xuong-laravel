@@ -18,8 +18,5 @@ class Rating extends Model
     {
         return $this->morphTo();
     }
-    public function articles()
-    {
-        return $this->morphedByMany(Articles::class, 'ratinggable');
-    }
+    
 }

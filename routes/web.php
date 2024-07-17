@@ -39,22 +39,24 @@ Route::get('/', function () {
 
     // Lấy danh sách các bài viết, video, và hình ảnh có đánh giá trung bình cao nhất.
     $topRatedArticles = Articles::with(['ratings' => function ($query) {
-        $query->select(DB::raw('ratingable_id,AVG(rating) as average_rating'))
+        $query->select(DB::raw('ratingable_id, AVG(rating) as average_rating'))
             ->groupBy('ratingable_id')
-            ->orderBy('average_rating', 'desc')
+            ->orderByDesc('average_rating')
             ->take(5);
     }])->get();
-    dd($topRatedArticles->ratings);
+    foreach ($topRatedArticles as $item) {
+        echo $item->ratings->first()->average_rating . PHP_EOL;
+    }
+    die;
 
     $topRatedVideo = Video::with(['ratings' => function ($query) {
-        $query->select(DB::raw('ratingable_id,AVG(rating) as average_rating'))
+        $query->select(DB::raw('ratingable_id, AVG(rating) as average_rating'))
             ->groupBy('ratingable_id')
             ->orderByDesc('average_rating');
-    }])->first();
-    dd($topRatedVideo->ratings);
-
-
+    }])->get();
+    dd($topRatedVideo);
     die;
+
     $products = \App\Models\Product::query()->latest('id')->limit(4)->get();
 
     return view('welcome', compact('products'));

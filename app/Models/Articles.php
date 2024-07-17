@@ -17,13 +17,8 @@ class Articles extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-    // public function ratings()
-    // {
-    //     return $this->morphMany(Rating::class, 'ratingable');
-    // }
-
     public function ratings()
     {
-        return $this->morphToMany(Rating::class, 'ratinggable');
+        return $this->morphMany(Rating::class, 'ratingable');
     }
 }
