@@ -46,8 +46,7 @@
                 <nav class="header__menu mobile-menu">
                     <ul>
                         <li class="active"><a href="{{ route('home') }}">Trang chủ</a></li>
-                        <li><a href="./shop.html">Nam</a></li>
-                        <li><a href="./shop.html">Nữ</a></li>
+                        <li><a href="{{ route('list-product') }}">Sản phẩm</a></li>
                         <li><a href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>

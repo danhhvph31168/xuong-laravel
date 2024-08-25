@@ -35,7 +35,7 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="cart">
                                 @if (session()->has('cart'))
                                     @foreach ($cart as $item)
                                         <tr>
@@ -62,7 +62,9 @@
                                             <td class="quantity__item">
                                                 <div class="quantity">
                                                     <div class="pro-qty-2">
-                                                        <input type="text" value="{{ $item['quatity'] }}">
+                                                        <input type="number" id="quatity" name="quatity"
+                                                            oninput="updateItemCart({{ $item['id'] }})" min="1"
+                                                            value="{{ $item['quatity'] }}">
                                                     </div>
                                                 </div>
                                             </td>
@@ -70,12 +72,8 @@
                                                 {{ number_format($item['quatity'] * $item['price_sale']) }}
                                             </td>
                                             <td class="cart__close">
-                                                <form action="{{ route('cart.deleteItem', $item) }}" method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="border-0 rounded-circle w-100 p-1"
-                                                        onclick="return confirm('Chắc chắn chưa?')"><b>x</b></button>
-                                                </form>
+                                                <button class="border-0 rounded-circle w-100 p-1"
+                                                    onclick="removeItemCart({{ $item['id'] }})"><b>x</b></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -118,4 +116,47 @@
         </div>
     </section>
     <!-- Shopping Cart Section End -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function removeItemCart(id) {
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('cart/deleteItem') }}/" + id,
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    window.location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                },
+            })
+        }
+
+        function updateItemCart(id) {
+            let valQty = $('#quatity').val();
+
+            if (valQty <= 1) {
+                valQty = 1;
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('cart/updateCart') }}/" + id,
+                data: {
+                    id: id,
+                    quatity: valQty
+                },
+                success: function(response) {
+                    window.location.reload();
+                    // $('#cart').html(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                },
+            })
+
+        }
+    </script>
 @endsection

@@ -866,7 +866,7 @@
             </div>
 
             <div class="mt-16">
-                <div class="row">
+                {{-- <div class="row">
                     @foreach ($products as $item)
                         <div class="col-md-3">
                             <div class="card">
@@ -884,7 +884,7 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
+                </div> --}}
 
                 <div class="text-center text-sm text-gray-500 dark:text-gray-400 sm:text-right sm:ml-0">
                     Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})

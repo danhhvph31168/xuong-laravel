@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -31,9 +32,9 @@ class CartController extends Controller
         $productVariant = ProductVariant::query()
             ->with(['color', 'size'])
             ->where([
-                'product_id'        => \request('product_id'),
-                'product_size_id'   => \request('product_size_id'),
-                'product_color_id'  => \request('product_color_id'),
+                'product_id' => \request('product_id'),
+                'product_size_id' => \request('product_size_id'),
+                'product_color_id' => \request('product_color_id'),
             ])
             ->firstOrFail();
 
@@ -43,30 +44,39 @@ class CartController extends Controller
 
             $data['quatity'] = \request('quatity');
 
-            session()->put('cart.' . $productVariant->id,  $data);
+            session()->put('cart.' . $productVariant->id, $data);
         } else {
 
             $data = session('cart')[$productVariant->id];
 
             $data['quatity'] += \request('quatity');
 
-            session()->put('cart.' . $productVariant->id,  $data);
+            session()->put('cart.' . $productVariant->id, $data);
         }
 
         return redirect()->route('cart.list');
     }
-    public function deleteItem($slug)
+    public function deleteItem($id)
     {
         $cart = session('cart');
 
         foreach ($cart as $key => $value) {
-            if ($value['slug'] == $slug) {
+            if ($value['id'] == $id) {
                 unset($cart[$key]);
             }
         }
 
         session()->put('cart', $cart);
+    }
+    public function updateCart(Request $request, $id)
+    {
+        $cart = session('cart');
 
-        return redirect()->route('cart.list');
+        foreach ($cart as $item) {
+            $item['quatity'] = $request->query('quatity');
+        }
+        Log::info($cart);
+
+        session()->put('cart', $cart);
     }
 }

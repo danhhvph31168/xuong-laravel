@@ -70,7 +70,6 @@ class OrderController extends Controller
                 ]);
 
                 OrderCreate::dispatch($order);
-                $user->notify(new InvoicePaid($order));
 
                 foreach ($dataItem as $item) {
                     $item['order_id'] = $order->id;

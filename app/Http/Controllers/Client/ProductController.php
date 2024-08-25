@@ -12,8 +12,13 @@ class ProductController extends Controller
 {
     public function list()
     {
-        $product = Product::query()->latest('id')->limit(8)->get();
+        $product = Product::query()->latest('id')->paginate(8);
         return view('client.home', compact('product'));
+    }
+    public function listAll()
+    {
+        $products = Product::query()->latest('id')->paginate(12);
+        return view('client.list-product', compact('products'));
     }
     public function detail($slug)
     {
